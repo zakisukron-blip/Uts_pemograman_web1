@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pemesanan Tiket Balap Motor GIFI</title>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0072ff, #00c6ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #ffffff;
+      padding: 25px 35px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      width: 400px;
+      transition: transform 0.3s ease;
+    }
+
+    .container:hover {
+      transform: scale(1.02);
+    }
+
+    h2 {
+      text-align: center;
+      color: #004aad;
+      margin-bottom: 10px;
+    }
+
+    p {
+      text-align: center;
+      color: #555;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-top: 6px;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    input[type="number"]:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    .kursi {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+
+    .kursi label {
+      background-color: #f0f0f0;
+      border: 2px solid transparent;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .kursi input {
+      display: none;
+    }
+
+    .kursi input:checked + span {
+      background: linear-gradient(135deg, #007bff, #00aaff);
+      color: white;
+      border: 2px solid #007bff;
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: inline-block;
+    }
+    button {
+      width: 100%;
+      background: linear-gradient(to right, #007bff, #00aaff);
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 15px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: linear-gradient(to right, #0056b3, #007bff);
+      transform: scale(1.02);
+    }
+
+    #reset {
+      background: #ccc;
+      color: #333;
+      margin-top: 10px;
+    }
+
+    #reset:hover {
+      background: #aaa;
+      transform: scale(1.02);
+    }
+    .hasil {
+      margin-top: 20px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      padding: 12px;
+      border: 1px solid #ddd;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .total {
+      font-size: 18px;
+      font-weight: bold;
+      color: #007bff;
+      margin-top: 10px;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin-top: 12px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Sistem Pemesanan Tiket</h2>
+    <p>🏍 Balap Motor GIFI - Hitung Total Otomatis</p>
+
+    <label for="jumlah">Jumlah Tiket</label>
+    <input type="number" id="jumlah" min="1" value="1" />
+
+    <label>Jenis Kursi</label>
+    <div class="kursi">
+      <label>
+        <input type="radio" name="kursi" value="reguler" checked />
+        <span>Reguler<br>Rp50.000</span>
+      </label>
+      <label>
+        <input type="radio" name="kursi" value="vip" />
+        <span>VIP<br>Rp75.000</span>
+      </label>
+    </div>
+
+    <button id="pesan" type="button">Pesan & Hitung Total</button>
+    <button id="reset" type="button">Reset</button>
+
+    <div class="hasil">
+      <p>Jenis Kursi: <strong id="jenis">Reguler</strong></p>
+      <p>Harga per Tiket: <strong id="harga">Rp50.000</strong></p>
+      <p>Jumlah Tiket: <strong id="jumlah2">1</strong></p>
+      <p class="total">Total: <span id="total">Rp50.000</span></p>
+    </div>
+
+    <footer>🏁 Selamat Menonton Balap Motor GIFI 🏍</footer>
+  </div>
+
+  <script>
+    const jumlah = document.getElementById('jumlah');
+    const jenisText = document.getElementById('jenis');
+    const hargaText = document.getElementById('harga');
+    const jumlah2 = document.getElementById('jumlah2');
+    const totalText = document.getElementById('total');
+
+    document.getElementById('pesan').addEventListener('click', () => {
+      const jumlahTiket = parseInt(jumlah.value) || 1;
+      const jenis = document.querySelector('input[name="kursi"]:checked').value;
+
+      let harga = jenis === "vip" ? 75000 : 50000;
+      const total = jumlahTiket * harga;
+
+      jenisText.textContent = jenis === "vip" ? "VIP" : "Reguler";
+      hargaText.textContent = formatRupiah(harga);
+      jumlah2.textContent = jumlahTiket;
+      totalText.textContent = formatRupiah(total);
+    });
+
+    document.getElementById('reset').addEventListener('click', () => {
+      jumlah.value = 1;
+      document.querySelector('input[value="reguler"]').checked = true;
+      jenisText.textContent = "Reguler";
+      hargaText.textContent = "Rp50.000";
+      jumlah2.textContent = "1";
+      totalText.textContent = "Rp50.000";
+    });
+
+    function formatRupiah(angka) {
+      return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        maximumFractionDigits: 0
+      }).format(angka);
+    }
+  </script>
+</body>
+</html>
